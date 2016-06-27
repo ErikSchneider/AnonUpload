@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class AnonFileRestController {
-
     @Autowired
     AnonFileRepository files;
 
-    @RequestMapping(name = "/files", method = RequestMethod.GET)
+    @RequestMapping(path = "/files", method = RequestMethod.GET)
     public Iterable<AnonFile> getFiles() {
         return files.findAll();
     }
