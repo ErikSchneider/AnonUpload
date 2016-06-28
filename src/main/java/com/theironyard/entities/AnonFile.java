@@ -12,18 +12,30 @@ public class AnonFile {
     @GeneratedValue
     int id;
 
+    boolean isPermanent = false;
+
+    @Column(nullable = false)
+    String comment;
+
     @Column(nullable = false)
     String originalFilename;
 
     @Column(nullable = false)
     String newFilename;
 
+    @Column(nullable = false)
+    String password;
+
     public AnonFile() {
     }
 
-    public AnonFile(String originalFilename, String newFilename) {
+
+    public AnonFile(boolean isPermanent, String comment, String originalFilename, String newFilename, String password) {
+        this.isPermanent = isPermanent;
+        this.comment = comment;
         this.originalFilename = originalFilename;
         this.newFilename = newFilename;
+        this.password = password;
     }
 
     public int getId() {
@@ -32,6 +44,22 @@ public class AnonFile {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isPermanent() {
+        return isPermanent;
+    }
+
+    public void setPermanent(boolean permanent) {
+        isPermanent = permanent;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getOriginalFilename() {
@@ -48,5 +76,13 @@ public class AnonFile {
 
     public void setNewFilename(String newFilename) {
         this.newFilename = newFilename;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
