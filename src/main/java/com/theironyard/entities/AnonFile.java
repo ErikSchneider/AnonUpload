@@ -10,8 +10,9 @@ import javax.persistence.*;
 public class AnonFile {
     @Id
     @GeneratedValue
-    int id;
+    Integer id;
 
+    @Column
     boolean isPermanent = false;
 
     @Column(nullable = false)
@@ -30,7 +31,8 @@ public class AnonFile {
     }
 
 
-    public AnonFile(boolean isPermanent, String comment, String originalFilename, String newFilename, String password) {
+    public AnonFile(Integer id, boolean isPermanent, String comment, String originalFilename, String newFilename, String password) {
+        this.id = id;
         this.isPermanent = isPermanent;
         this.comment = comment;
         this.originalFilename = originalFilename;
@@ -38,11 +40,11 @@ public class AnonFile {
         this.password = password;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

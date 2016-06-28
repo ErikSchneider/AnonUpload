@@ -33,22 +33,33 @@ public class AnonFileController {
     }
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
-    public String upload(MultipartFile file, String comment, boolean isPermanent, String password) throws IOException, PasswordStorage.CannotPerformOperationException {
-        File dir = new File("public/files");
-        dir.mkdirs();
+    public String upload(MultipartFile file, Integer id, String comment, boolean isPermanent, String password) throws IOException, PasswordStorage.CannotPerformOperationException {
+        if (files.countByIsPermanentFalse() < 2) {
 
-        File uploadedFile = File.createTempFile("file", file.getOriginalFilename(), dir);
-        FileOutputStream fos = new FileOutputStream(uploadedFile);
-        fos.write(file.getBytes());
+            File dir = new File("public/files");
+            dir.mkdirs();
 
-        AnonFile anonFile = new AnonFile(isPermanent, comment, file.getOriginalFilename(), uploadedFile.getName(), PasswordStorage.createHash(password));
+            File uploadedFile = File.createTempFile("file", file.getOriginalFilename(), dir);
+            FileOutputStream fos = new FileOutputStream(uploadedFile);
+            fos.write(file.getBytes());
 
-        if (files.count() < 2) {
+            AnonFile anonFile = new AnonFile(id, isPermanent, comment, file.getOriginalFilename(), uploadedFile.getName(), PasswordStorage.createHash(password));
             files.save(anonFile);
         }
-        else if (files.count()> 2) {
-            int id = files.searchMinId();
-            files.delete(id);
+        else {
+
+            files.delete(files.findMinNonPermanentId());
+
+            File dir = new File("public/files");
+            dir.mkdirs();
+
+            File uploadedFile = File.createTempFile("file", file.getOriginalFilename(), dir);
+            FileOutputStream fos = new FileOutputStream(uploadedFile);
+            fos.write(file.getBytes());
+
+            AnonFile anonFile = new AnonFile(id, isPermanent, comment, file.getOriginalFilename(), uploadedFile.getName(), PasswordStorage.createHash(password));
+            files.save(anonFile);
+
         }
 
         return "redirect:/";
@@ -73,6 +84,8 @@ public class AnonFileController {
             throw new Exception("Invalid Password");
         }
         else {
+            File fileOnDisk = new File("public/files/" + anonFile.getNewFilename());
+            fileOnDisk.delete();
             files.delete(anonFile);
         }
 

@@ -12,8 +12,10 @@ import java.util.List;
  * Created by Erik on 6/27/16.
  */
 public interface AnonFileRepository extends CrudRepository<AnonFile, Integer> {
-    @Query ("SELECT MIN (id) FROM AnonFile")
-     public int searchMinId ();
+    public int countByIsPermanentFalse ();
+
+    @Query ("SELECT MIN (id) FROM AnonFile WHERE isPermanent = false")
+    public int findMinNonPermanentId ();
 
     public AnonFile findByComment(String comment);
 
